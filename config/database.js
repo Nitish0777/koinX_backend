@@ -4,22 +4,18 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const MONGO_URI =
-  process.env.MONGO_URI || "mongodb://172.0.0.1:27017/express-mongo";
+  process.env.MONGO_URI || "mongodb://127.0.0.1:27017/express-mongo";
 
-  console.log(MONGO_URI);
-
-// Connect to MongoDB
-mongoose
-  .connect(MONGO_URI)
-  .then(() => {
+const connectToMongoDB = async () => {
+  try {
+    console.log("Connecting to MongoDB...");
+    await mongoose.connect(MONGO_URI);
     console.log("Successfully connected to MongoDB!");
-  })
-  .catch((error) => {
-    console.error("Error connecting to MongoDB:", error);
-  });
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error.message);
+  }
+};
 
-mongoose.connection.on("disconnected", () => {
-  console.log("MongoDB connection lost. Attempting to reconnect...");
-});
+connectToMongoDB();
 
 export default mongoose;
